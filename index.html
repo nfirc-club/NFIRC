@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南大附中資訊研究社</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        nav {
+            background-color: rgba(30, 30, 30, 0.9);
+            overflow: hidden;
+            padding: 16px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            height: 50px;
+            width: 50px;
+            margin-right: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(100, 65, 165, 0.7);
+        }
+
+        .nav-nfirc {
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px #6441A5;
+            transition: color 0.3s;
+            color: white;
+            margin-right: 20px; /* Add some spacing after NFIRC text */
+        }
+
+        .nav-nfirc:hover {
+            color: #6441A5;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        .nav-btns {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btns a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 10px 14px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            margin: 0;
+            background-color: rgba(100, 65, 165, 0.3);
+            border: 1px solid #6441A5;
+            white-space: nowrap;
+        }
+
+        .nav-btns a:hover {
+            background-color: #6441A5;
+            color: white;
+        }
+
+        /* Add a class for the rightmost button */
+        .nav-btns a:last-child {
+            margin-right: 40px; /* Remove right margin from the last button */
+        }
+
+        .container {
+            padding: clamp(120px, 24vw, 180px) 16px 40px;
+            text-align: center;
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        .container2 {
+            padding: 10px 16px 20px;
+            text-align: center;
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 24px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: clamp(1rem, 2.2vw, 1.3rem);
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+
+        .cool-button {
+            background-color: #6441A5;
+            color: white;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 1.2em;
+            margin-top: 30px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        .cool-button:hover {
+            background-color: #452A7A;
+            transform: translateY(-2px);
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .background-animation span {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: rgba(100, 65, 165, 0.6);
+            animation: animate 6s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .background-animation span:nth-child(even) {
+            background: rgba(69, 42, 122, 0.6);
+        }
+
+        .background-animation span:nth-child(3n+1) {
+            left: 15%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 1s;
+        }
+
+        .background-animation span:nth-child(3n+2) {
+            left: 45%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 2s;
+        }
+
+        .background-animation span:nth-child(3n+3) {
+            left: 75%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 3s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-900px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 16px;
+            }
+
+            .nav-left {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-btns {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding-top: 8px;
+            }
+
+            .nav-btns.show {
+                display: flex;
+            }
+
+            .nav-btns a {
+                width: 100%;
+                font-size: 0.9em;
+                padding: 10px 12px;
+            }
+
+            .nav-btns a:last-child {
+                margin-right: 0;
+            }
+
+            .features {
+                width: 96%;
+                margin: 20px auto;
+            }
+
+            .feature.right {
+                flex-direction: column;
+            }
+
+            .feature {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                height: auto;
+            }
+
+            .feature img {
+                width: 100%;
+                max-width: 420px;
+                height: auto;
+                margin-bottom: 10px;
+            }
+
+            .feature .feature-content {
+                width: 100%;
+                text-align: left;
+                padding: 15px;
+            }
+
+            footer {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-btns a {
+                width: calc(50% - 8px);
+                justify-content: center;
+            }
+
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .feature .feature-content h3,
+            .feature .feature-content h4 {
+                font-size: 1rem;
+            }
+        }
+
+        footer {
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 0;
+            color: #f2f2f2;
+            text-align: center; /* Center the copyright text */
+        }
+
+        footer img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color:  rgba(100, 65, 165, 0.3);
+            color: #f2f2f2;
+            border: 1px solid #6441A5;
+            border-radius: 5px;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            transition: background-color 0.3s, transform 0.2s, color 0.3s;
+            z-index: 1000; /* Ensure it's above the footer */
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #6441A5;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            width: min(92%, 1100px);
+            margin: 30px auto;
+        }
+
+        .feature {
+            display: flex;
+            margin-bottom: 30px;
+            background-color: rgba(30, 30, 30, 0.8);
+            border: 2px solid rgba(100, 65, 165, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            overflow: hidden;
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            align-items: stretch;
+        }
+
+        .feature:hover,
+        .feature:active {
+            border-color: #6441A5;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            background-color: rgba(42, 42, 42, 0.95);
+        }
+
+        .feature.right {
+            flex-direction: row-reverse;
+        }
+
+        .feature img {
+            width: 45%;
+            min-width: 220px;
+            height: 260px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .feature .feature-content {
+            width: 55%;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .feature .feature-content h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .feature .feature-content h4 {
+            font-size: 1rem;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+
+        .feature .feature-content .preview-list {
+            margin: 10px 0 0 0;
+            padding-left: 18px;
+            color: #d8c7ff;
+        }
+
+        .feature .feature-content .preview-list li {
+            margin-bottom: 6px;
+        }
+
+        .modal {
+            display: flex;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.78);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            width: min(92vw, 760px);
+            max-height: 85vh;
+            overflow-y: auto;
+            background: #1f1f1f;
+            border: 2px solid #6441A5;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            color: #fff;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.25s ease;
+        }
+
+        .modal.show .modal-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #fff;
+        }
+
+        .modal-card .close-btn {
+            float: right;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.4em;
+            cursor: pointer;
+        }
+
+        .modal-card ul {
+            padding-left: 18px;
+        }
+
+        .modal-card li {
+            margin-bottom: 6px;
+        }
+
+        /* Responsive adjustments for the features section */
+        @media (max-width: 768px) {
+            .features {
+                width: 100%;
+                margin: 20px auto;
+            }
+
+            .feature {
+                flex-direction: row;
+                align-items: stretch;
+                text-align: left;
+            }
+
+            .feature.right {
+                flex-direction: row-reverse;
+            }
+
+            .feature img {
+                width: 42%;
+                min-width: 140px;
+                height: auto;
+                margin-bottom: 0;
+            }
+
+            .feature .feature-content {
+                width: 58%;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .feature {
+                flex-direction: column;
+            }
+
+            .feature.right {
+                flex-direction: column;
+            }
+
+            .feature img {
+                width: 100%;
+                height: 240px;
+            }
+
+            .feature .feature-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <img src="./images/nfirc_logo.png" alt="NFIRC Logo" class="nav-logo">
+            <a href="./index.html" class="nav-nfirc">
+                <img src="./images/NFIRC.jpg" width="100px" alt="">
+            </a>
+        </div>
+        <button class="menu-toggle" aria-label="切換導覽選單" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-btns">
+            <a href="./index.html">主頁</a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=311435@gm.tntcsh.tn.edu.tw" target="_blank">聯絡我們</a>
+            <a href="connect.html">相關連結</a>
+            <a href="https://discord.gg/hB3ntg32n" target="_blank">Discord 社群</a>
+            <a href="https://www.instagram.com/nfirc_club?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 id="title">歡迎來到 南大附中資訊研究社</h1>
+        <p>
+            我們是一個充滿活力的社團，致力於提供資訊資源和學習環境，讓成員間能夠互相交流、分享經驗，並運用程式設計解決生活問題。
+            我們會定期舉辦聯合社課、聯合寒訓等等活動，歡迎所有對資訊有興趣的人加入。
+        </p>
+        <a href="https://discord.gg/hB3ntg32n" class="cool-button" target="_blank">加入我們</a>
+    </div>
+
+    <div class="container2">
+        <h1 id="title">精彩活動</h1>
+    </div>
+
+    <section class="features" id="activities-list"></section>
+
+    <div class="modal" id="activity-modal" aria-hidden="true">
+        <div class="modal-card">
+            <button class="close-btn" type="button" aria-label="關閉活動詳情">×</button>
+            <h3 id="modal-title">活動詳情</h3>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <div class="background-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <footer>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <a href="https://www.instagram.com/nfirc_club?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==" target="_blank" style="margin: 0 10px;">
+                <img src="./images/ig.jpg" alt="Instagram" style="width: 150px; height: 60px;">
+            </a>
+            <a href="https://discord.gg/hB3ntg32n" target="_blank" style="margin: 0 10px;">
+                <img src="./images/discord.png" alt="Discord" style="width: 150px; height: 60px;">
+            </a>
+        </div>
+        <div style="margin-top: 10px; color: #f2f2f2; text-align: center;">
+            連絡方式：
+        </div>
+        <div style="margin-top: 5px; color: #f2f2f2; text-align: center;">
+            電話：0958356776　　gmail：nfirc.official@gmail.com
+        </div>
+        <p style="text-align: center;">&copy; 2024 南大附中資訊研究社</p>
+    </footer>
+
+    <button id="scrollToTopBtn" title="Go to top">回到頂端⭡</button>
+
+    <script>
+        const titleElement = document.getElementById('title');
+        const titleText = titleElement.textContent;
+        titleElement.textContent = '';
+
+        let charIndex = 0;
+        const typingDelay = 50;
+
+        function typeTitle() {
+            if (charIndex < titleText.length) {
+                titleElement.textContent += titleText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeTitle, typingDelay);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            typeTitle();
+            loadActivities();
+        });
+
+        // Scroll to top button functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+
+        scrollToTopBtn.addEventListener('click', () => {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navBtns = document.querySelector('.nav-btns');
+
+        if (menuToggle && navBtns) {
+            menuToggle.addEventListener('click', () => {
+                navBtns.classList.toggle('show');
+                menuToggle.classList.toggle('active');
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', String(!expanded));
+            });
+        }
+
+        async function loadActivities() {
+            const container = document.getElementById('activities-list');
+            const modal = document.getElementById('activity-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const closeBtn = modal.querySelector('.close-btn');
+
+            try {
+                const response = await fetch('./activities.json');
+                const data = await response.json();
+
+                container.innerHTML = '';
+
+                data.activities.forEach((activity, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'feature';
+                    card.tabIndex = 0;
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('aria-label', `查看活動詳情：${activity.title || '活動'}`);
+                    const previewContent = Array.isArray(activity.previewContent) ? activity.previewContent : [];
+                    card.innerHTML = `
+                        <img src="${activity.image || ''}" alt="${activity.title || '活動圖片'}">
+                        <div class="feature-content">
+                            <h3>${activity.title || '未命名活動'}</h3>
+                            <h4>${activity.subtitle || ''}</h4>
+                            ${activity.registration ? `<p><strong>📅 報名時間：</strong>${activity.registration}</p>` : ''}
+                            <ul class="preview-list">
+                                ${previewContent.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+
+                    const openActivityDetails = () => {
+                        modalTitle.textContent = activity.title || '活動詳情';
+                        const details = activity.details || {};
+                        const detailLabels = {
+                            location: '📍 地點',
+                            time: '📅 時間',
+                            target: '👥 對象',
+                            host: '💻 主辦',
+                            theme: '🎯 主旨',
+                            content: '🎉 活動內容',
+                            courses: '🎨 課程內容',
+                            fees: '💰 費用',
+                            notes: '📌 備註',
+                            quota: '👨🏻‍💻 名額'
+                        };
+                        const detailElements = [];
+
+                        Object.entries(details).forEach(([key, value]) => {
+                            if (value === null || value === undefined || value === '') return;
+
+                            const label = detailLabels[key] || key;
+                            if (Array.isArray(value)) {
+                                if (!value.length) return;
+                                const heading = document.createElement('h4');
+                                heading.textContent = `${label}：`;
+                                const list = document.createElement('ul');
+                                value.forEach(item => {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = typeof item === 'object' ? JSON.stringify(item) : String(item);
+                                    list.appendChild(listItem);
+                                });
+                                detailElements.push(heading, list);
+                                return;
+                            }
+
+                            const paragraph = document.createElement('p');
+                            const strong = document.createElement('strong');
+                            strong.textContent = `${label}：`;
+                            paragraph.append(strong, document.createTextNode(typeof value === 'object' ? JSON.stringify(value) : String(value)));
+                            detailElements.push(paragraph);
+                        });
+
+                        modalContent.replaceChildren(...detailElements);
+                        modal.classList.add('show');
+                        modal.setAttribute('aria-hidden', 'false');
+                    };
+
+                    card.addEventListener('click', openActivityDetails);
+                    card.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            openActivityDetails();
+                        }
+                    });
+
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('載入活動資料失敗:', error);
+                container.innerHTML = '<p>活動資料載入失敗，請稍後再試。</p>';
+            }
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            });
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                    modal.setAttribute('aria-hidden', 'true');
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

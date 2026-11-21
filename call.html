@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯絡我們</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        nav {
+            background-color: rgba(30, 30, 30, 0.9);
+            overflow: hidden;
+            padding: 16px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            height: 50px;
+            width: 50px;
+            margin-right: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(100, 65, 165, 0.7);
+        }
+
+        .nav-nfirc {
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px #6441A5;
+            transition: color 0.3s;
+            color: white;
+            margin-right: 20px; /* Add some spacing after NFIRC text */
+        }
+
+        .nav-nfirc:hover {
+            color: #6441A5;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        .nav-btns {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btns a {
+            display: inline-block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 10px 14px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            margin: 0;
+            background-color: rgba(100, 65, 165, 0.3);
+            border: 1px solid #6441A5;
+            white-space: nowrap;
+        }
+
+        .nav-btns a:hover {
+            background-color: #6441A5;
+            color: white;
+        }
+
+        /* Add a class for the rightmost button */
+        .nav-btns a:last-child {
+            margin-right: 40px; /* Remove right margin from the last button */
+        }
+
+        .container {
+            padding: clamp(120px, 24vw, 180px) 16px 40px;
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 24px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+
+        textarea {
+            width: min(100%, 760px);
+            height: 200px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 7px;
+            border: 1px solid #6441A5;
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #fff;
+        }
+
+        .send-button {
+            background-color: #6441A5;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            width: min(100%, 220px);
+        }
+
+        .send-button:hover {
+            background-color: #452A7A;
+            transform: translateY(-2px);
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .background-animation span {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: rgba(100, 65, 165, 0.6);
+            animation: animate 6s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .background-animation span:nth-child(even) {
+            background: rgba(69, 42, 122, 0.6);
+        }
+
+        .background-animation span:nth-child(3n+1) {
+            left: 15%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 1s;
+        }
+
+        .background-animation span:nth-child(3n+2) {
+            left: 45%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 2s;
+        }
+
+        .background-animation span:nth-child(3n+3) {
+            left: 75%;
+            width: 50px;
+            height: 50px;
+            animation-delay: 3s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-900px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 16px;
+            }
+
+            .nav-left {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-btns {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding-top: 8px;
+            }
+
+            .nav-btns.show {
+                display: flex;
+            }
+
+            .nav-btns a {
+                width: 100%;
+                font-size: 0.9em;
+                padding: 10px 12px;
+            }
+
+            .nav-btns a:last-child {
+                margin-right: 0;
+            }
+
+            .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            textarea {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-btns a {
+                width: calc(50% - 8px);
+            }
+
+            .send-button {
+                width: 100%;
+            }
+        }
+
+        footer {
+            background-color: rgba(30, 30, 30, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            z-index: 10;
+            margin-top: 20px;
+        }
+
+        footer img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color:  rgba(100, 65, 165, 0.3);
+            color: #f2f2f2;
+            border: 1px solid #6441A5;
+            border-radius: 5px;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            transition: background-color 0.3s, transform 0.2s, color 0.3s;
+            z-index: 1000; /* Ensure it's above the footer */
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #6441A5;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <img src="./images/nfirc_logo.png" alt="NFIRC Logo" class="nav-logo">
+            <a href="./index.html" class="nav-nfirc">
+                <img src="./images/NFIRC.jpg" width="100px" alt="">
+            </a>
+        </div>
+        <button class="menu-toggle" aria-label="切換導覽選單" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-btns">
+            <a href="./index.html">主頁</a>
+            <a href="./call.html">聯絡我們</a>
+            <a href="./connect.html">相關連結</a>
+            <a href="https://discord.gg/hB3ntg32n" target="_blank">Discord 社群</a>
+            <a href="https://www.instagram.com/nfirc_club?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 id="title">聯絡我們</h1>
+        <textarea id="message" placeholder="請輸入您的訊息"></textarea>
+        <button class="send-button" onclick="sendMessage()">發送訊息</button>
+    </div>
+
+    <div class="background-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <footer>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <a href="https://www.instagram.com/nfirc_club?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==" target="_blank" style="margin: 0 10px;">
+                <img src="./images/ig.jpg" alt="Instagram" style="width: 150px; height: 60px;">
+            </a>
+            <a href="https://discord.gg/hB3ntg32n" target="_blank" style="margin: 0 10px;">
+                <img src="./images/discord.png" alt="Discord" style="width: 150px; height: 60px;">
+            </a>
+        </div>
+        <div style="margin-top: 10px; color: #f2f2f2; text-align: center;">
+            連絡方式：
+        </div>
+        <div style="margin-top: 5px; color: #f2f2f2; text-align: center;">
+            電話：0958356776　　gmail：nfirc.official@gmail.com
+        </div>
+        <p style="text-align: center;">&copy; 2024 南大附中資訊研究社</p>
+    </footer>
+
+    <button id="scrollToTopBtn" title="Go to top">Top</button>
+
+    <script>
+        const titleElement = document.getElementById('title');
+        const titleText = titleElement.textContent;
+        titleElement.textContent = '';
+
+        let charIndex = 0;
+        const typingDelay = 50;
+
+        function typeTitle() {
+            if (charIndex < titleText.length) {
+                titleElement.textContent += titleText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeTitle, typingDelay);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            typeTitle();
+        });
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            if (message) {
+                fetch('/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({message: message})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('訊息已發送!');
+                        document.getElementById('message').value = ''; // Clear the textarea
+                    } else {
+                        alert('訊息發送失敗!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('訊息發送失敗!');
+                });
+            } else {
+                alert('請輸入訊息!');
+            }
+        }
+
+        // Scroll to top button functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+
+        scrollToTopBtn.addEventListener('click', () => {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navBtns = document.querySelector('.nav-btns');
+
+        if (menuToggle && navBtns) {
+            menuToggle.addEventListener('click', () => {
+                navBtns.classList.toggle('show');
+                menuToggle.classList.toggle('active');
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', String(!expanded));
+            });
+        }
+
+    </script>
+
+</body>
+</html>
